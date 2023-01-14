@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestaurantAPI.Entities;
+using RestaurantAPI.Middleware;
 using RestaurantAPI.Services;
 
 namespace RestaurantAPI
@@ -38,6 +39,12 @@ namespace RestaurantAPI
 
             // Add IRestaurantService and its implementation, RestaurantService as scoped services
             services.AddScoped<IRestaurantService, RestaurantService>();
+
+            services.AddScoped<ErrorHandlingMiddleware>();
+
+            services.AddSwaggerGen();
+
+            services.AddScoped<RequestTimeMiddleware>();
         }
 
         // Method for configuring the HTTP request pipeline
@@ -52,9 +59,17 @@ namespace RestaurantAPI
                 // Use developer exception page
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<RequestTimeMiddleware>();
             // Use HTTPS redirection
             app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+
+
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurant API");
+            });
 
             // Use routing
             app.UseRouting();

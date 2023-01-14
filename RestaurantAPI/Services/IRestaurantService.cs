@@ -15,9 +15,9 @@ namespace RestaurantAPI.Services
         RestaurantDto GetById(int id);
 
         //Deletes a restaurant by id and returns a boolean indicating if the operation was successful
-        bool Delete(int id);
+        void Delete(int id);
 
         //Updates a restaurant by id and returns a boolean indicating if the operation was successful
-        bool Update(int id, UpdateRestaurantDto dto);
+        void Update(int id, UpdateRestaurantDto dto);
     }
 }
