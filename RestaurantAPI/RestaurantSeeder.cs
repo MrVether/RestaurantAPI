@@ -19,6 +19,12 @@ namespace RestaurantAPI
             // Check if the database is connected
             if (_dbcontext.Database.CanConnect())
             {
+                if (!_dbcontext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbcontext.Roles.AddRange(roles);
+                    _dbcontext.SaveChanges();
+                }
                 // Check if there is no data in the Restaurants table
                 if (!_dbcontext.Restaurants.Any())
                 {
@@ -36,6 +42,25 @@ namespace RestaurantAPI
                     }
                 }
             }
+        }
+        private IEnumerable<Role> GetRoles()
+        {
+            var roles = new List<Role>()
+        {
+            new Role()
+            {
+                Name = "User"
+            },
+                new Role()
+            {
+                Name = "Manager"
+            },
+                new Role()
+            {
+                Name = "Admin"
+            },
+        };
+            return roles;
         }
 
         // Method for getting sample restaurants data

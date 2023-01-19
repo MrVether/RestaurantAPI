@@ -21,7 +21,7 @@ namespace RestaurantAPI
 
             // Map properties from Dish to DishDto
             CreateMap<Dish, DishDto>();
-
+            CreateMap<CreateDishDto, Dish>();
             // Map properties from CreateRestaurantDto to Restaurant
             CreateMap<CreateRestaurantDto, Restaurant>()
               // Map Address property from City, Street and PostalCode properties of CreateRestaurantDto 

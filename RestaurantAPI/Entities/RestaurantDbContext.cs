@@ -16,8 +16,18 @@ namespace RestaurantAPI.Entities
         //DbSet for the Dish entity
         public DbSet<Dish> Dishes { get; set; }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+             .Property(u => u.Email)
+             .IsRequired();
+            modelBuilder.Entity<Role>()
+             .Property(u => u.Name)
+
+             .IsRequired();
             //Sets the name property of the Restaurant entity as required and with max length of 25
             modelBuilder.Entity<Restaurant>()
                 .Property(r => r.Name)
