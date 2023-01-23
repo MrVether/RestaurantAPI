@@ -1,13 +1,19 @@
 using AutoMapper;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Entities;
 using RestaurantAPI.Middleware;
+using RestaurantAPI.Models;
+using RestaurantAPI.Models.Validators;
 using RestaurantAPI.Services;
+using System.Text;
 
 namespace RestaurantAPI
 {
@@ -26,8 +32,30 @@ namespace RestaurantAPI
         // Method for configuring services
         public void ConfigureServices(IServiceCollection services)
         {
+            var authenticationSettings = new AuthenticationSettings();
+            Configuration.GetSection("Authentication").Bind(authenticationSettings);
+            services.AddSingleton(authenticationSettings);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Bearer";
+                options.DefaultScheme = "Bearer";
+                options.DefaultChallengeScheme = "Bearer";
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authenticationSettings.JwtIssuer,
+                    ValidAudience = authenticationSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtIssuer)),
+
+                };
+
+            });
+
             // Add controllers
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
 
             // Add DbContext for RestaurantDbContext
             services.AddDbContext<RestaurantDbContext>();
@@ -49,6 +77,7 @@ namespace RestaurantAPI
             services.AddScoped<IDishService, DishService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
         }
 
         // Method for configuring the HTTP request pipeline
@@ -65,6 +94,7 @@ namespace RestaurantAPI
             }
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<RequestTimeMiddleware>();
+            app.UseAuthentication();
             // Use HTTPS redirection
             app.UseHttpsRedirection();
             app.UseSwagger();
