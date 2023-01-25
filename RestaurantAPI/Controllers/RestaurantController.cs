@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ namespace RestaurantAPI.Controllers
 {
     [Route("api/restaurant")]
     [ApiController]
+    [Authorize()]
     public class RestaurantController : ControllerBase
     {
         //A service to handle restaurant data
@@ -31,6 +33,7 @@ namespace RestaurantAPI.Controllers
 
         //Creates a new restaurant from data passed in request body and returns created with location of new resource or bad request if data is invalid
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
 
@@ -41,6 +44,7 @@ namespace RestaurantAPI.Controllers
 
         //Returns all restaurants
         [HttpGet]
+        [Authorize(Policy = "Atleast20")]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
             var restaurantsDtos = _restaurantService.GetAll();
