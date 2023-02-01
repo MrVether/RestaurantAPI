@@ -25,6 +25,9 @@ namespace RestaurantAPI.Entities
         //The contact number of the restaurant
         public string ContactNumber { get; set; }
 
+        public int? CreatedById { get; set; }
+        public virtual User CreatedBy { get; set; }
+
         //The ID of the address that the restaurant belongs to
         public int AddressId { get; set; }
 

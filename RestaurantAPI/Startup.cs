@@ -60,6 +60,7 @@ namespace RestaurantAPI
                 options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality"));
                 options.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20)));
             });
+            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
             // Add controllers
             services.AddControllers().AddFluentValidation();
@@ -69,7 +70,7 @@ namespace RestaurantAPI
 
             // Add RestaurantSeeder as a scoped service
             services.AddScoped<RestaurantSeeder>();
-
+            services.AddScoped<IUserContextService, UserContextService>();
             // Add AutoMapper with assembly of the current class
             services.AddAutoMapper(this.GetType().Assembly);
 
@@ -77,7 +78,7 @@ namespace RestaurantAPI
             services.AddScoped<IRestaurantService, RestaurantService>();
 
             services.AddScoped<ErrorHandlingMiddleware>();
-
+            services.AddHttpContextAccessor();
             services.AddSwaggerGen();
 
             services.AddScoped<RequestTimeMiddleware>();
