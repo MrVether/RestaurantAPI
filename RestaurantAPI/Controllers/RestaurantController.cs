@@ -3,72 +3,74 @@ using Microsoft.AspNetCore.Mvc;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
 using System.Collections.Generic;
-using System.Security.Claims;
 
 namespace RestaurantAPI.Controllers
 {
     [Route("api/restaurant")]
     [ApiController]
-    [Authorize()]
+    [Authorize]
+
     public class RestaurantController : ControllerBase
     {
-        //A service to handle restaurant data
         private readonly IRestaurantService _restaurantService;
 
-        //Injecting service 
         public RestaurantController(IRestaurantService restaurantService)
         {
             _restaurantService = restaurantService;
         }
 
-        //Deletes a restaurant by ID and returns no content if successful or not found if not
-        [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] int id)
-        {
-            _restaurantService.Delete(id, User);
-
-
-            return NoContent();
-
-        }
-
-        //Creates a new restaurant from data passed in request body and returns created with location of new resource or bad request if data is invalid
         [HttpPost]
-        [Authorize(Roles = "Admin,Manager")]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
-            var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var id = _restaurantService.Create(dto, userId);
+            //Tworzenie nowego restauracji
+            var id = _restaurantService.Create(dto);
 
+            //Zwracanie informacji o utworzeniu restauracji
             return Created($"/api/restaurant/{id}", null);
         }
 
-        //Returns all restaurants
         [HttpGet]
-        [Authorize(Policy = "Atleast20")]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
+            //Pobieranie wszystkich restauracji
             var restaurantsDtos = _restaurantService.GetAll();
+
+            //Zwracanie wszystkich restauracji
             return Ok(restaurantsDtos);
         }
 
-        //Returns a restaurant by ID or not found if not found
-        [HttpGet("{id}")]
-        public ActionResult<RestaurantDto> Get([FromRoute] int id)
-        {
-            var restaurant = _restaurantService.GetById(id);
-
-            return Ok(restaurant);
-        }
-
-        //Updates a restaurant by ID and returns OK if successful or not found if not found or bad request if data is invalid
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
         {
+            //Aktualizacja restauracji o danym ID
+            _restaurantService.Update(id, dto);
 
-            _restaurantService.Update(id, dto, User);
-
+            //Zwracanie informacji o pomyślnej aktualizacji
             return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            //Usuwanie restauracji o danym ID
+            _restaurantService.Delete(id);
+
+            //Zwracanie informacji o pomyślnym usunięciu
+            return NoContent();
+        }
+
+
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public ActionResult<RestaurantDto> Get([FromRoute] int id)
+        {
+            //Pobieranie restauracji o danym ID
+            var restaurant = _restaurantService.GetById(id);
+
+            //Zwracanie restauracji o danym ID
+            return Ok(restaurant);
         }
     }
 }

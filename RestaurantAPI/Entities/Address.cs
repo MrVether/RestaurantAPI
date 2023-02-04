@@ -2,19 +2,19 @@
 {
     public class Address
     {
-        //The unique ID of the address
+        //Unikalne ID adresu
         public int Id { get; set; }
 
-        //The city of the address
+        //Miasto adresu
         public string City { get; set; }
 
-        //The street of the address
+        //Ulica adresu
         public string Street { get; set; }
 
-        //The postal code of the address
+        //Kod pocztowy adresu
         public string PostalCode { get; set; }
 
-        //Navigation property for related restaurant
+        //Właściwość nawigacji dla powiązanego restauracji
         public virtual Restaurant Restaurant { get; set; }
     }
 }

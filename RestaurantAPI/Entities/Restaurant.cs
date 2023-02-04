@@ -4,37 +4,37 @@ namespace RestaurantAPI.Entities
 {
     public class Restaurant
     {
-        //The unique ID of the restaurant
+        //Unikalne ID restauracji
         public int Id { get; set; }
 
-        //The name of the restaurant
+        //Nazwa restauracji
         public string Name { get; set; }
 
-        //The description of the restaurant
+        //Opis restauracji
         public string Description { get; set; }
 
-        //The category of the restaurant
+        //Kategoria restauracji
         public string Category { get; set; }
 
-        //Indicates if the restaurant has delivery service
+        //Informacja czy restauracja ma usługę dostawy
         public bool HasDelivery { get; set; }
 
-        //The contact email of the restaurant
+        //Kontaktowy adres e-mail restauracji
         public string ContactEmail { get; set; }
 
-        //The contact number of the restaurant
+        //Kontaktowy numer telefonu restauracji
         public string ContactNumber { get; set; }
 
         public int? CreatedById { get; set; }
         public virtual User CreatedBy { get; set; }
 
-        //The ID of the address that the restaurant belongs to
+        //ID adresu, do którego należy restauracja
         public int AddressId { get; set; }
 
-        //Navigation property for related address
+        //Właściwość nawigacyjna dla powiązanego adresu
         public virtual Address Address { get; set; }
 
-        //Navigation property for related dishes
+        //Właściwość nawigacyjna dla powiązanych dań
         public virtual List<Dish> Dishes { get; set; }
     }
 }

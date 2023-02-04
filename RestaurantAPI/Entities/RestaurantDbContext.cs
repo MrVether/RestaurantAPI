@@ -4,48 +4,54 @@ namespace RestaurantAPI.Entities
 {
     public class RestaurantDbContext : DbContext
     {
-        //The connection string used to connect to the database
+        //Łańcuch połączenia używany do połączenia z bazą danych
         private string _connectionString = "Server=localhost;Database=master;Database=RestaurantDb;Trusted_Connection=True;";
 
-        //DbSet for the Restaurant entity
+        //DbSet dla encji Restauracji
         public DbSet<Restaurant> Restaurants { get; set; }
 
-        //DbSet for the Address entity
+        //DbSet dla encji Adresu
         public DbSet<Address> Adresses { get; set; }
 
-        //DbSet for the Dish entity
+        //DbSet dla encji Danie
         public DbSet<Dish> Dishes { get; set; }
 
+        //DbSet dla encji Użytkownik
         public DbSet<User> Users { get; set; }
+
+        //DbSet dla encji Rola
         public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Ustawienie wymagalności właściwości Email dla encji Użytkownik
             modelBuilder.Entity<User>()
              .Property(u => u.Email)
              .IsRequired();
+
+            //Ustawienie wymagalności właściwości Name dla encji Rola
             modelBuilder.Entity<Role>()
              .Property(u => u.Name)
-
              .IsRequired();
-            //Sets the name property of the Restaurant entity as required and with max length of 25
+
+            //Ustawienie właściwości Name dla encji Restauracja jako wymagalnej i o maksymalnej długości 25
             modelBuilder.Entity<Restaurant>()
                 .Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(25);
 
-            //Sets the name property of the Dish entity as required
+            //Ustawienie właściwości Name dla encji Danie jako wymagalnej
             modelBuilder.Entity<Dish>()
                 .Property(d => d.Name)
                 .IsRequired();
 
-            //Sets the city property of the Address entity as required and with max length of 50
+            //Ustawienie właściwości City dla encji Adres jako wymagalnej i o maksymalnej długości 50
             modelBuilder.Entity<Address>()
                 .Property(a => a.City)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            //Sets the street property of the Address entity as required and with max length of 50
+            //Ustawienie właściwości Street dla encji Adres jako wymagalnej i o maksymalnej długości 50
             modelBuilder.Entity<Address>()
                 .Property(a => a.Street)
                 .IsRequired()
@@ -54,7 +60,9 @@ namespace RestaurantAPI.Entities
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //Sets the connection string for the context
+            //Ustawienie łańcucha połączenia dla kontekstu
+
+
             optionsBuilder.UseSqlServer(_connectionString);
         }
     }

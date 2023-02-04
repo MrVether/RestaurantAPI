@@ -2,22 +2,22 @@
 {
     public class Dish
     {
-        //The unique ID of the dish
+        //Unikalne ID dania
         public int Id { get; set; }
 
-        //The name of the dish
+        //Nazwa dania
         public string Name { get; set; }
 
-        //The description of the dish
+        //Opis dania
         public string Description { get; set; }
 
-        //The price of the dish
+        //Cena dania
         public decimal Price { get; set; }
 
-        //The ID of the restaurant that the dish belongs to
+        //ID restauracji, do której danie należy
         public int RestaurantId { get; set; }
 
-        //Navigation property for related restaurant
+        //Właściwość nawigacji do powiązanej restauracji
         public virtual Restaurant Restaurant { get; set; }
     }
 }
