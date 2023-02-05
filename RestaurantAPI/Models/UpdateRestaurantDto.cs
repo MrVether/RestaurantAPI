@@ -1,18 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RestaurantAPI.Models
 {
     public class UpdateRestaurantDto
     {
-        //Name of the restaurant, required and max length of 25
         [Required]
         [MaxLength(25)]
         public string Name { get; set; }
-
-        //Description of the restaurant
         public string Description { get; set; }
-
-        //Indicates if the restaurant has delivery service
         public bool HasDelivery { get; set; }
     }
 }

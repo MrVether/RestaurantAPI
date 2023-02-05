@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using RestaurantAPI.Exceptions;
-using System;
-using System.Threading.Tasks;
 
 namespace RestaurantAPI.Middleware
 {
@@ -26,7 +29,7 @@ namespace RestaurantAPI.Middleware
             }
             catch (BadRequestException badRequestException)
             {
-                context.Response.StatusCode = 404;
+                context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(badRequestException.Message);
             }
             catch (NotFoundException notFoundException)
@@ -40,7 +43,6 @@ namespace RestaurantAPI.Middleware
 
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("Something went wrong");
-
             }
         }
     }

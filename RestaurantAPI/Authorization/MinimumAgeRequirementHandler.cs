@@ -1,50 +1,41 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace RestaurantAPI.Authorization
 {
-    // Klasa reprezentująca handler dla wymagania minimalnego wieku
     public class MinimumAgeRequirementHandler : AuthorizationHandler<MinimumAgeRequirement>
     {
-        // Logger
-        private readonly ILogger<MinimumAgeRequirement> _logger;
+        private readonly ILogger<MinimumAgeRequirementHandler> _logger;
 
-        // Konstruktor przyjmujący logger
-        public MinimumAgeRequirementHandler(ILogger<MinimumAgeRequirement> logger)
+        public MinimumAgeRequirementHandler(ILogger<MinimumAgeRequirementHandler> logger)
         {
             _logger = logger;
         }
-
-        // Metoda odpowiadająca za sprawdzenie, czy użytkownik spełnia wymagania minimalnego wieku
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, MinimumAgeRequirement requirement)
         {
-            // Pobieranie daty urodzenia użytkownika z jego Claims
             var dateOfBirth = DateTime.Parse(context.User.FindFirst(c => c.Type == "DateOfBirth").Value);
-            // Pobieranie adresu email użytkownika
-            var userEmail = context.User.FindFirst(c => c.Type == ClaimTypes.Name).Value;
 
-            // Logowanie informacji o użytkowniku i jego dacie urodzenia
-            _logger.LogInformation($"Użytkownik: {userEmail} z datą urodzenia: [{dateOfBirth}]");
+            var userEmail = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            // Sprawdzenie, czy użytkownik jest wieku minimalnego
+            _logger.LogInformation($"User: {userEmail} with date of birth: [{dateOfBirth}]");
+
             if (dateOfBirth.AddYears(requirement.MinimumAge) <= DateTime.Today)
             {
-                // Logowanie informacji o pomyślnej autoryzacji
-                _logger.LogInformation("Autoryzacja udana");
-                // Zatwierdzenie wymagania
+                _logger.LogInformation("Authorization succedded");
                 context.Succeed(requirement);
             }
             else
             {
-                // Logowanie informacji o nieudanej autoryzacji
-                _logger.LogInformation("Autoryzacja nieudana");
+                _logger.LogInformation("Authorization failed");
             }
-            // Zakończenie procesu autoryzacji
-            return Task.CompletedTask;
 
+            return Task.CompletedTask;
         }
     }
 }

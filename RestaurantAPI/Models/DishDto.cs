@@ -1,17 +1,16 @@
-﻿namespace RestaurantAPI.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RestaurantAPI.Models
 {
     public class DishDto
     {
-        //Id of the dish
         public int Id { get; set; }
-
-        //Name of the dish
         public string Name { get; set; }
-
-        //Description of the dish
         public string Description { get; set; }
-
-        //Price of the dish
         public decimal Price { get; set; }
     }
 }

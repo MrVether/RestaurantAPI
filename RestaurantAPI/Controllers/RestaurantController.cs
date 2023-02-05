@@ -1,8 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RestaurantAPI.Entities;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
-using System.Collections.Generic;
 
 namespace RestaurantAPI.Controllers
 {
@@ -22,41 +30,34 @@ namespace RestaurantAPI.Controllers
         [HttpPost]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
-            //Tworzenie nowego restauracji
             var id = _restaurantService.Create(dto);
 
-            //Zwracanie informacji o utworzeniu restauracji
             return Created($"/api/restaurant/{id}", null);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery]RestaurantQuery query)
         {
-            //Pobieranie wszystkich restauracji
-            var restaurantsDtos = _restaurantService.GetAll();
+            var restaurantsDtos = _restaurantService.GetAll(query);
 
-            //Zwracanie wszystkich restauracji
             return Ok(restaurantsDtos);
         }
 
         [HttpPut("{id}")]
-        public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
+        public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute]int id)
         {
-            //Aktualizacja restauracji o danym ID
-            _restaurantService.Update(id, dto);
 
-            //Zwracanie informacji o pomyślnej aktualizacji
+            _restaurantService.Update(id, dto);
+           
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            //Usuwanie restauracji o danym ID
             _restaurantService.Delete(id);
 
-            //Zwracanie informacji o pomyślnym usunięciu
             return NoContent();
         }
 
@@ -66,10 +67,8 @@ namespace RestaurantAPI.Controllers
         [AllowAnonymous]
         public ActionResult<RestaurantDto> Get([FromRoute] int id)
         {
-            //Pobieranie restauracji o danym ID
             var restaurant = _restaurantService.GetById(id);
 
-            //Zwracanie restauracji o danym ID
             return Ok(restaurant);
         }
     }

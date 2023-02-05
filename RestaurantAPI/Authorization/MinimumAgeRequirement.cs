@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestaurantAPI.Authorization
 {
-    // Klasa reprezentująca wymaganie minimalnego wieku
     public class MinimumAgeRequirement : IAuthorizationRequirement
     {
-        // Minimalny wiek
         public int MinimumAge { get; }
 
-        // Konstruktor przyjmujący minimalny wiek
         public MinimumAgeRequirement(int minimumAge)
         {
             MinimumAge = minimumAge;

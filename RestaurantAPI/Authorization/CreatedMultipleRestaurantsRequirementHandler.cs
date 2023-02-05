@@ -1,41 +1,36 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using RestaurantAPI.Entities;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using RestaurantAPI.Entities;
 
 namespace RestaurantAPI.Authorization
 {
-    // Klasa implementująca obsługę wymagania autoryzacji użytkownika do tworzenia wielu restauracji
     public class CreatedMultipleRestaurantsRequirementHandler : AuthorizationHandler<CreatedMultipleRestaurantsRequirement>
     {
-        // Kontekst bazy danych
         private readonly RestaurantDbContext _context;
 
-        // Konstruktor przyjmujący kontekst bazy danych
         public CreatedMultipleRestaurantsRequirementHandler(RestaurantDbContext context)
         {
             _context = context;
         }
-
-        // Metoda asynchroniczna wywoływana w celu sprawdzenia, czy użytkownik spełnia wymaganie autoryzacji
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, 
             CreatedMultipleRestaurantsRequirement requirement)
         {
-            // Pobieranie ID użytkownika z claims
             var userId = int.Parse(context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-            // Pobieranie liczby utworzonych przez użytkownika restauracji
-            var createdRestaurantsCount = _context
-                 .Restaurants
-                 .Count(r => r.CreatedById == userId);
+            var createdRestaurantsCount =  _context
+                .Restaurants
+                .Count(r => r.CreatedById == userId);
 
-            // Jeśli użytkownik utworzył wymaganą liczbę restauracji, zwracane jest pozytywne wyniki
-            if (createdRestaurantsCount >= requirement.MinimumRestaurantCreated)
+            if (createdRestaurantsCount >= requirement.MinimumRestaurantsCreated)
             {
                 context.Succeed(requirement);
-
             }
+
             return Task.CompletedTask;
         }
     }

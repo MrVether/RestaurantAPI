@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RestaurantAPI.Authorization
 {
-    // Klasa implementująca wymaganie autoryzacji użytkownika do tworzenia wielu restauracji
     public class CreatedMultipleRestaurantsRequirement : IAuthorizationRequirement
     {
-        // Konstruktor przyjmujący minimalną liczbę restauracji, którą użytkownik musi utworzyć, aby być autoryzowanym
         public CreatedMultipleRestaurantsRequirement(int minimumRestaurantsCreated)
         {
-            // Przypisywanie wartości do właściwości MinimumRestaurantCreated
-            MinimumRestaurantCreated = minimumRestaurantsCreated;
+            MinimumRestaurantsCreated = minimumRestaurantsCreated;
         }
-
-        // Właściwość zawierająca minimalną liczbę restauracji, którą użytkownik musi utworzyć, aby być autoryzowanym
-        public int MinimumRestaurantCreated { get; }
+        public int MinimumRestaurantsCreated { get; }
     }
 }
