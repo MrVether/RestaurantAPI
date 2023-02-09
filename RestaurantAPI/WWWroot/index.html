@@ -1,0 +1,126 @@
+﻿</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration and Login Form</title>
+</head>
+<body>
+    <div id="registration-form">
+        <h1>Registration Form</h1>
+        <form>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br><br>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br><br>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <br><br>
+            <label for="nationality">Nationality:</label>
+            <input type="text" id="nationality" name="nationality" required>
+            <br><br>
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+            <br><br>
+            <label for="roleId">RoleID:</label>
+            <input type="text" id="roleId" name="roleId" required>
+            <br><br>
+            <button type="submit" id="register-btn">Register</button>
+        </form>
+    </div>
+
+
+    <div id="login-form">
+        <h1>Login Form</h1>
+        <form>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br><br>
+            <button type="submit" id="login-btn">Login</button>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+    const registerBtn = document.getElementById("register-btn");
+    const loginBtn = document.getElementById("login-btn");
+
+
+
+    const register = async () => {
+        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const nationality = document.getElementById("nationality").value;
+        const dateOfBirth = document.getElementById("dateOfBirth").value;
+        const roleId = document.getElementById("roleId").value;
+
+        const requestBody = {
+            email,
+            username,
+            password,
+            confirmPassword,
+            nationality,
+            dateOfBirth,
+            roleId: parseInt(roleId)
+        };
+
+        try {
+            const response = await fetch("https://localhost:5001/api/account/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to register user");
+            }
+
+            alert("User registered successfully!");
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred while registering the user. Please try again later.");
+        }
+    };
+
+    registerBtn.addEventListener("click", register);
+
+    const login = async () => {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const loginDto = {
+            username,
+            password
+        };
+
+        try {
+            const response = await fetch("api/account/login", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginDto)
+            });
+
+            const responseJson = await response.json();
+            console.log(responseJson);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    loginBtn.addEventListener("click", login);
+</script>

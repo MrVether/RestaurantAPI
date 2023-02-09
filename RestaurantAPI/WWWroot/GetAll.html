@@ -1,0 +1,25 @@
+﻿<script>
+    fetch('/api/restaurant/')
+        .then(response => response.json())
+        .then(data => {
+            // Get the restaurant list container
+            const restaurantList = document.getElementById('restaurantList');
+
+            // Iterate over the list of restaurants and create a new HTML element for each one
+            data.forEach(restaurant => {
+                const newRestaurant = document.createElement('div');
+                newRestaurant.innerHTML = "Restaurant Name: " + restaurant.name + "<br>  Description: " + restaurant.description + "<br>  Category: " + restaurant.category + "<br>  Delivery: "
+                    + restaurant.hasDelivery + "<br>  City: " + restaurant.city + "<br>  Street: " + restaurant.street + "<br>  PostalCode: " + restaurant.postalCode;
+
+                const dishesList = document.createElement('ul');
+                restaurant.dishes.forEach(dish => {
+                    const newDish = document.createElement('li');
+                    newDish.innerHTML = "Dish Name: " + dish.name + "<br>  Description: " + (dish.description || 'N/A') + "<br>  Price: " + dish.price;
+                    dishesList.appendChild(newDish);
+                });
+                newRestaurant.appendChild(dishesList);
+                restaurantList.appendChild(newRestaurant);
+            });
+        })
+        .catch(error => console.error(error));
+</script>

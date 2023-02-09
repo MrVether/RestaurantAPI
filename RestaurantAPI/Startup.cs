@@ -121,6 +121,8 @@ namespace RestaurantAPI
 
             // Use authorization
             app.UseAuthorization();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             // Use endpoints
             app.UseEndpoints(endpoints =>
