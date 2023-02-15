@@ -44,7 +44,6 @@ namespace RestaurantAPI.Services
             var claims = new List<Claim>()
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, $"{ user.FirstName} {user.LastName}"),
             new Claim(ClaimTypes.Role, $"{user.Role.Name }"),
             new Claim("DateOfBirth", user.DateOfBirth.Value.ToString("yyyy-MM-dd"))
             };
@@ -63,6 +62,7 @@ namespace RestaurantAPI.Services
                 expires: expires,
                 signingCredentials: cred);
             var tokenHandler = new JwtSecurityTokenHandler();
+
             return tokenHandler.WriteToken(token);
         }
 

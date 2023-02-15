@@ -1,14 +1,6 @@
 ﻿<html>
 <head>
     <script>
-
-        function OnCreate() {
-            var form = document.getElementById('loginForm')
-            form.addEventListener('submit', (e) => {
-                e.preventDefault()
-            })
-        }
-
         function sendLoginRequest() {
             const loginForm = document.getElementById("loginForm");
             const email = loginForm.elements["email"].value;
@@ -19,11 +11,6 @@
                 password: password
             };
 
-            //trzy wyjscia
-            //  dajesz ajaxa i ustawiasz requesty ale nie jeste pewien
-            //  cookies
-            //  albo .NetIdentity
-            // albo button z on clickiem z dodawaniem w headerze tokena 
             const xhr = new XMLHttpRequest();
             xhr.open("POST", "/api/account/login", true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -31,17 +18,13 @@
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                     const token = this.responseText;
                     localStorage.setItem("token", token);
-                    
                     alert(token);
                     alert("User logged in!");
-                  
-
                 }
             };
-
             xhr.send(JSON.stringify(loginDto));
         }
-        OnCreate()
+
     </script>
 </head>
 <body>
@@ -50,7 +33,5 @@
         <input type="password" name="password" placeholder="Password">
         <button type="button" onclick="sendLoginRequest()">Login</button>
     </form>
-
-    <button onclick="">Redirect to some page</button>
 </body>
 </html>

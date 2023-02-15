@@ -9,12 +9,6 @@ namespace RestaurantAPI.Entities
         //Adres email użytkownika
         public string Email { get; set; }
 
-        //Imię użytkownika
-        public string FirstName { get; set; }
-
-        //Nazwisko użytkownika
-        public string LastName { get; set; }
-
         //Data urodzenia użytkownika
         public DateTime? DateOfBirth { get; set; }
 

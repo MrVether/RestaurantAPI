@@ -22,6 +22,8 @@ namespace RestaurantAPI.Controllers
         [HttpPost]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
+
+
             //Tworzenie nowego restauracji
             var id = _restaurantService.Create(dto);
 
@@ -30,7 +32,6 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
             //Pobieranie wszystkich restauracji

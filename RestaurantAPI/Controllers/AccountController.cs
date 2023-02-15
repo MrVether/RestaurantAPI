@@ -26,6 +26,7 @@ namespace RestaurantAPI.Controllers
         public ActionResult Login([FromBody] LoginDto dto)
         {
             string token = _accountService.GenerateJwt(dto); // Wywołanie metody GenerateJwt na obiekcie _accountService i przekazanie argumentu dto.
+            HttpContext.Response.Headers.Add("Authorization", $"Bearer {token}");
             return Ok(token); // Zwrócenie wyniku 200 OK z wartością token.
 
         }
