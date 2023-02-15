@@ -1,85 +1,89 @@
-﻿
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Registration Form</title>
-</head>
-<body>
-    <div id="registration-form">
-        <h1>Registration Form</h1>
-        <form>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <br><br>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-
-            <br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br><br>
-            <label for="confirmPassword">Confirm Password:</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required>
-            <br><br>
-            <label for="nationality">Nationality:</label>
-            <input type="text" id="nationality" name="nationality" required>
-            <br><br>
-            <label for="dateOfBirth">Date of Birth:</label>
-            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
-            <br><br>
-            <label for="roleId">RoleID:</label>
-            <input type="text" id="roleId" name="roleId" required>
-            <br><br>
-            <button type="submit" id="register-btn">Register</button>
-        </form>
+﻿<form id="register-form">
+    <div>
+        <label for="email">Adres e-mail:</label>
+        <input type="email" id="email" name="email" required>
     </div>
-    <script>
-    const registerBtn = document.getElementById("register-btn");
-    const loginBtn = document.getElementById("login-btn");
+    <div>
+        <label for="password">Hasło:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <label for="confirmPassword">Potwierdź hasło:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+    </div>
+    <div>
+        <label for="nationality">Narodowość:</label>
+        <input type="text" id="nationality" name="nationality">
+    </div>
+    <div>
+        <label for="dateOfBirth">Data urodzenia:</label>
+        <input type="date" id="dateOfBirth" name="dateOfBirth">
+    </div>
+    <div>
+        <label for="roleId">Rola:</label>
+        <select id="roleId" name="roleId">
+            <option value="3">Administrator</option>
+            <option value="2">Menadżer</option>
+            <option value="1">Użytkownik</option>
+        </select>
+    </div>
+    <button type="submit">Zarejestruj</button>
+</form>
 
 
+<script>
+    const registerForm = document.querySelector('#register-form');
 
-    const register = async () => {
-        const email = document.getElementById("email").value;
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
-        const nationality = document.getElementById("nationality").value;
-        const dateOfBirth = document.getElementById("dateOfBirth").value;
-        const roleId = document.getElementById("roleId").value;
+    registerForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-        const requestBody = {
-            email,
-            username,
-            password,
-            confirmPassword,
-            nationality,
-            dateOfBirth,
-            roleId: parseInt(roleId)
+        const emailInput = document.querySelector('#email');
+        const passwordInput = document.querySelector('#password');
+        const confirmPasswordInput = document.querySelector('#confirmPassword');
+        const nationalityInput = document.querySelector('#nationality');
+        const dateOfBirthInput = document.querySelector('#dateOfBirth');
+        const roleIdInput = document.querySelector('#roleId');
+
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        const nationality = nationalityInput.value;
+        const dateOfBirth = dateOfBirthInput.value;
+        const roleId = parseInt(roleIdInput.value);
+
+        if (password !== confirmPassword) {
+            alert('Wprowadzone hasła nie są identyczne.');
+            return;
+        }
+
+        const data = {
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword,
+            nationality: nationality,
+            dateOfBirth: dateOfBirth,
+            roleId: roleId
         };
 
         try {
-            const response = await fetch("https://localhost:5001/api/account/register", {
-                method: "POST",
+            const response = await fetch('/api/account/register', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(data)
             });
 
-            if (!response.ok) {
-                throw new Error("Failed to register user");
+            if (response.ok) {
+                alert('Rejestracja użytkownika przebiegła pomyślnie.');
+            } else {
+                const error = await response.json();
+                alert('Wystąpił błąd podczas rejestracji użytkownika: ' + error);
             }
-
-            alert("User registered successfully!");
         } catch (error) {
-            console.error(error);
-            alert("User registered successfully!");
+            alert('Wystąpił błąd podczas rejestracji użytkownika: ' + error);
         }
-    };
+    });
 
-    registerBtn.addEventListener("click", register);
 
-    </script>
-</body>
-</html>
+</script>

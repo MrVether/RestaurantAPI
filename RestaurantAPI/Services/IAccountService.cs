@@ -1,4 +1,5 @@
-﻿using RestaurantAPI.Models;
+﻿using RestaurantAPI.Entities;
+using RestaurantAPI.Models;
 
 namespace RestaurantAPI.Services
 {
@@ -6,5 +7,8 @@ namespace RestaurantAPI.Services
     {
         string GenerateJwt(LoginDto dto);
         void RegisterUser(RegisterUserDto dto);
+        User GetAccountByEmail(string email);
+        string GetRoleForAccount(string email);
+
     }
 }

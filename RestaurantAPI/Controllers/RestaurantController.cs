@@ -30,7 +30,7 @@ namespace RestaurantAPI.Controllers
             //Zwracanie informacji o utworzeniu restauracji
             return Created($"/api/restaurant/{id}", null);
         }
-
+        [Authorize(Roles ="Admin")]
         [HttpGet]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {

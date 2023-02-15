@@ -1,56 +1,50 @@
 ﻿<html>
 <head>
-    <script>
 
-        function OnCreate() {
-            var form = document.getElementById('loginForm')
-            form.addEventListener('submit', (e) => {
-                e.preventDefault()
-            })
-        }
-
-        function sendLoginRequest() {
-            const loginForm = document.getElementById("loginForm");
-            const email = loginForm.elements["email"].value;
-            const password = loginForm.elements["password"].value;
-
-            const loginDto = {
-                email: email,
-                password: password
-            };
-
-            //trzy wyjscia
-            //  dajesz ajaxa i ustawiasz requesty ale nie jeste pewien
-            //  cookies
-            //  albo .NetIdentity
-            // albo button z on clickiem z dodawaniem w headerze tokena 
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "/api/account/login", true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function () {
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    const token = this.responseText;
-                    localStorage.setItem("token", token);
-                    
-                    alert(token);
-                    alert("User logged in!");
-                  
-
-                }
-            };
-
-            xhr.send(JSON.stringify(loginDto));
-        }
-        OnCreate()
-    </script>
 </head>
 <body>
     <form id="loginForm">
         <input type="email" name="email" placeholder="Email">
-        <input type="password" name="password" placeholder="Password">
+        <input type="password" name="PasswordHash" placeholder="PasswordHash">
         <button type="button" onclick="sendLoginRequest()">Login</button>
     </form>
-
-    <button onclick="">Redirect to some page</button>
 </body>
 </html>
+<script>
+
+    function OnCreate() {
+        var form = document.getElementById('loginForm')
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+        })
+    }
+
+    function sendLoginRequest() {
+        const loginForm = document.getElementById("loginForm");
+        const email = loginForm.elements["email"].value;
+        const password = loginForm.elements["PasswordHash"].value;
+
+        const loginDto = {
+            email: email,
+            PasswordHash: password
+        };
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/account/Login", true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                const token = this.responseText;
+                localStorage.setItem("token", token);
+
+                alert(token);
+                alert("User logged in!");
+
+                window.location.href = "/Home/Index";
+            }
+        };
+
+        xhr.send(JSON.stringify(loginDto));
+    }
+    OnCreate()
+</script>

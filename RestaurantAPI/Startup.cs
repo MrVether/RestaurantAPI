@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,12 @@ namespace RestaurantAPI
         // Method for configuring services
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+      .AddCookie(options =>
+      {
+          options.LoginPath = "/Account/Login";
+      });
+
             var authenticationSettings = new AuthenticationSettings();
             Configuration.GetSection("Authentication").Bind(authenticationSettings);
             services.AddSingleton(authenticationSettings);
@@ -121,7 +128,8 @@ namespace RestaurantAPI
 
             // Use authorization
             app.UseAuthorization();
-            app.UseDefaultFiles();
+            app.UseCookiePolicy();
+           app.UseDefaultFiles();
             app.UseStaticFiles();
 
             // Use endpoints

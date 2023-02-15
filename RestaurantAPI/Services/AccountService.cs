@@ -81,5 +81,27 @@ namespace RestaurantAPI.Services
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
+        public User GetAccountByEmail(string email)
+        {
+            var user = _context.Users
+                .FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+            return user;
+        }
+        public string GetRoleForAccount(string email)
+        {
+            var role = _context.Users
+                .Where(u => u.Email == email)
+                .Select(u => u.Role.Name)
+                .FirstOrDefault();
+            if (role == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+            return role;
+        }
     }
 }

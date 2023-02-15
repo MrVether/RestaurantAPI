@@ -1,6 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Threading.Tasks;
+using System;
+using RestaurantAPI.Entities;
 
 namespace RestaurantAPI.Controllers
 {
@@ -9,12 +19,13 @@ namespace RestaurantAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService; // Deklaracja zmiennej _accountService typu IAccountService.
-
-        public AccountController(IAccountService accountService)
+        private readonly IPasswordHasher<User> _passwordHasher;
+        public AccountController(IAccountService accountService, IPasswordHasher<User> passwordHasher)
         {
             _accountService = accountService;
+            _passwordHasher = passwordHasher;
         }
-
+        [AllowAnonymous]
         [HttpPost("register")] // Zadeklarowanie, że akcja jest odpowiedzialna za rejestrację użytkownika i dostępna przez ścieżkę "api/account/register"
         public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
         {
@@ -22,13 +33,52 @@ namespace RestaurantAPI.Controllers
             return Ok(); // Zwrócenie wyniku 200 OK.
         }
 
-        [HttpPost("login")] // Zadeklarowanie, że akcja jest odpowiedzialna za logowanie użytkownika i dostępna przez ścieżkę "api/account/login"
-        public ActionResult Login([FromBody] LoginDto dto)
+    
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(User model)
         {
-            string token = _accountService.GenerateJwt(dto); // Wywołanie metody GenerateJwt na obiekcie _accountService i przekazanie argumentu dto.
-            HttpContext.Response.Headers.Add("Authorization", $"Bearer {token}");
-            return Ok(token); // Zwrócenie wyniku 200 OK z wartością token.
+            if (ModelState.IsValid)
+            {
+                var account =  _accountService.GetAccountByEmail(model.Email);
+                var role = _accountService.GetRoleForAccount(model.Email);
 
+                if (account != null)
+                {
+                    var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(account, account.PasswordHash, model.PasswordHash);
+                    if (passwordVerificationResult == PasswordVerificationResult.Success)
+                    {
+                        var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, account.Email),
+                     new Claim(ClaimTypes.Role, "Admin"),            };
+
+                        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            AllowRefresh = true,
+                            IsPersistent = true,
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30)
+                        };
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
+
+                        Response.Cookies.Append("AuthCookie", "authenticated");
+
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return BadRequest();
+                }
+            }
+            return Ok();
         }
     }
 }
