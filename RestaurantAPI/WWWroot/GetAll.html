@@ -1,25 +1,60 @@
-﻿<script>
-    fetch('/api/restaurant/')
-        .then(response => response.json())
-        .then(data => {
-            // Get the restaurant list container
-            const restaurantList = document.getElementById('restaurantList');
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wszystkie restauracje</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous" />
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Wszystkie restauracje</h1>
 
-            // Iterate over the list of restaurants and create a new HTML element for each one
-            data.forEach(restaurant => {
-                const newRestaurant = document.createElement('div');
-                newRestaurant.innerHTML = "Restaurant Name: " + restaurant.name + "<br>  Description: " + restaurant.description + "<br>  Category: " + restaurant.category + "<br>  Delivery: "
-                    + restaurant.hasDelivery + "<br>  City: " + restaurant.city + "<br>  Street: " + restaurant.street + "<br>  PostalCode: " + restaurant.postalCode;
+        <div id="restaurantsList" class="mx-auto"></div>
+    </div>
 
-                const dishesList = document.createElement('ul');
-                restaurant.dishes.forEach(dish => {
-                    const newDish = document.createElement('li');
-                    newDish.innerHTML = "Dish Name: " + dish.name + "<br>  Description: " + (dish.description || 'N/A') + "<br>  Price: " + dish.price;
-                    dishesList.appendChild(newDish);
-                });
-                newRestaurant.appendChild(dishesList);
-                restaurantList.appendChild(newRestaurant);
-            });
-        })
-        .catch(error => console.error(error));
-</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script>
+        const restaurantsList = document.getElementById('restaurantsList');
+
+        fetch('/api/restaurant')
+            .then(response => response.json())
+            .then(data => {
+                const restaurantsListHtml = `
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Nazwa</th>
+                    <th>Opis</th>
+                    <th>Kategoria</th>
+                    <th>Dostawa</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  ${data.map(restaurant => `
+                    <tr>
+                      <td>${restaurant.name}</td>
+                      <td>${restaurant.description || '-'}</td>
+                      <td>${restaurant.category}</td>
+                      <td>${restaurant.hasDelivery ? 'Tak' : 'Nie'}</td>
+              
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `;
+                restaurantsList.innerHTML = restaurantsListHtml;
+            })
+            .catch(error => console.error(error));
+    </script>
+</body>
+</html>

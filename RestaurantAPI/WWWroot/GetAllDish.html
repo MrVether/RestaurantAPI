@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Pobierz wszystkie dania</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4">Pobierz wszystkie dania</h1>
+            <form id="getAllDishesForm" class="mb-4">
+                <div class="form-group">
+                    <label for="restaurantId">ID Restauracji:</label>
+                    <input type="number" id="restaurantId" name="restaurantId" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Pobierz Wszystkie Dania</button>
+            </form>
+            <div id="dishesList"></div>
+        </div>
+        </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        </body>
+</html>
+    <script>
+        const getAllDishesForm = document.getElementById("getAllDishesForm");
+        const dishesList = document.getElementById("dishesList");
+
+        getAllDishesForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const restaurantId = document.getElementById("restaurantId").value;
+            const url = `https://localhost:5001/api/${restaurantId}/dish`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const dishItems = data.map(dish => {
+                        return `<li>ID: ${dish.id}, Nazwa: ${dish.name}, Opis: ${dish.description}, Cena: ${dish.price}</li>`;
+                    });
+                    dishesList.innerHTML = `<ul>${dishItems.join("")}</ul>`;
+                })
+                .catch(error => console.error(`Błąd pobierania dań: ${error}`));
+        });
+
+    </script>

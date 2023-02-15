@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Utwórz nową restaurację</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Utwórz nową restaurację</h1>
+                <form id="create-restaurant-form">
+                    <div class="form-group">
+                        <label for="name">Nazwa:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Opis:</label>
+                        <input type="text" id="description" name="description" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Kategoria:</label>
+                        <input type="text" id="category" name="category" class="form-control" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="contactEmail">Email:</label>
+                        <input type="email" id="contactEmail" name="contactEmail" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactNumber">Numer telefonu:</label>
+                        <input type="tel" id="contactNumber" name="contactNumber" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">Miasto:</label>
+                        <input type="text" id="city" name="city" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="street">Ulica:</label>
+                        <input type="text" id="street" name="street" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postalCode">Kod pocztowy:</label>
+                        <input type="text" id="postalCode" name="postalCode" class="form-control" required>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" id="hasDelivery" name="hasDelivery" class="form-check-input">
+                        <label class="form-check-label" for="hasDelivery">Dostawa</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Utwórz</button>
+                </form>
+            </div>
+            </div>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRMS/c/H8NQ8T0KVnL"
+                    crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                    crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                    crossorigin="anonymous"></script>
+
+            <script>
+                const form = document.getElementById('create-restaurant-form');
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+
+                    const data = {
+                        name: document.getElementById('name').value,
+                        description: document.getElementById('description').value,
+                        category: document.getElementById('category').value,
+                        hasDelivery: document.getElementById('hasDelivery').checked,
+                        contactEmail: document.getElementById('contactEmail').value,
+                        contactNumber: document.getElementById('contactNumber').value,
+                        city: document.getElementById('city').value,
+                        street: document.getElementById('street').value,
+                        postalCode: document.getElementById('postalCode').value
+                    };
+
+
+                    const response = await fetch('/api/restaurant/Create', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        // Pobranie informacji o utworzonej restauracji z nagłówka "Location"
+                        const locationHeader = response.headers.get('Location');
+                        const restaurantId = locationHeader.split('/').pop();
+
+                        // Wyświetlenie komunikatu o powodzeniu i przekierowanie do widoku szczegółów restauracji
+                        alert(`Restauracja została utworzona. Id: ${restaurantId}`);
+                        window.location.href = `/restaurant/${restaurantId}`;
+                    } else {
+                        // Wyświetlenie komunikatu o błędzie
+                        alert('Nie udało się utworzyć restauracji. Spróbuj ponownie później.');
+                    }
+                });
+            </script>
+</body>
+</html>

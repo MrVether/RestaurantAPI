@@ -46,9 +46,9 @@ namespace RestaurantAPI
             services.AddSingleton(authenticationSettings);
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = "Bearer";
-                options.DefaultScheme = "Bearer";
-                options.DefaultChallengeScheme = "Bearer";
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddJwtBearer(cfg =>
             {
                 cfg.RequireHttpsMetadata = false;
@@ -69,7 +69,6 @@ namespace RestaurantAPI
                 options.AddPolicy("CreatedAtleast2Restaurants",
                     builder => builder.AddRequirements(new CreatedMultipleRestaurantsRequirement(2)));
             });
-            services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
             services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
             services.AddScoped<IAuthorizationHandler, CreatedMultipleRestaurantsRequirementHandler>();
             // Add controllers
@@ -129,7 +128,7 @@ namespace RestaurantAPI
             // Use authorization
             app.UseAuthorization();
             app.UseCookiePolicy();
-           app.UseDefaultFiles();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             // Use endpoints

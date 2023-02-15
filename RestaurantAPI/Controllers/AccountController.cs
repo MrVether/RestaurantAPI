@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantAPI.Entities;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
-using System;
-using RestaurantAPI.Entities;
 
 namespace RestaurantAPI.Controllers
 {
@@ -33,14 +32,14 @@ namespace RestaurantAPI.Controllers
             return Ok(); // Zwrócenie wyniku 200 OK.
         }
 
-    
+
         [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login(User model)
         {
             if (ModelState.IsValid)
             {
-                var account =  _accountService.GetAccountByEmail(model.Email);
+                var account = _accountService.GetAccountByEmail(model.Email);
                 var role = _accountService.GetRoleForAccount(model.Email);
 
                 if (account != null)
@@ -51,7 +50,7 @@ namespace RestaurantAPI.Controllers
                         var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, account.Email),
-                     new Claim(ClaimTypes.Role, "Admin"),            };
+                     new Claim(ClaimTypes.Role, role),            };
 
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var principal = new ClaimsPrincipal(identity);

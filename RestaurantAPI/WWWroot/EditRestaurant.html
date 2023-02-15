@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <title>Aktualizuj restaurację</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Aktualizuj Restauracje</h1>
+                <form id="update-restaurant-form">
+                    <div class="form-group">
+                        <label for="restaurant-id">ID restauracji:</label>
+                        <input type="text" class="form-control" id="restaurant-id" name="restaurant-id" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Nazwa:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Opis:</label>
+                        <input type="text" class="form-control" id="description" name="description">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Kategoria:</label>
+                        <input type="text" class="form-control" id="category" name="category">
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="contactEmail">Email:</label>
+                        <input type="email" class="form-control" id="contactEmail" name="contactEmail">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactNumber">Numer telefonu:</label>
+                        <input type="tel" class="form-control" id="contactNumber" name="contactNumber">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">Miasto:</label>
+                        <input type="text" class="form-control" id="city" name="city">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="street">Ulica:</label>
+                        <input type="text" class="form-control" id="street" name="street">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postalCode">Kod pocztowy:</label>
+                        <input type="text" class="form-control" id="postalCode" name="postalCode">
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="hasDelivery" name="hasDelivery">
+                            <label class="form-check-label" for="hasDelivery">Dostawa:</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Aktualizuj</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script>
+        const form = document.getElementById('update-restaurant-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const restaurantId = document.getElementById('restaurant-id').value;
+            const data = {};
+
+            if (document.getElementById('name').value) {
+                data.name = document.getElementById('name').value;
+            }
+
+            if (document.getElementById('description').value) {
+                data.description = document.getElementById('description').value;
+            }
+
+            if (document.getElementById('category').value) {
+                data.category = document.getElementById('category').value;
+            }
+
+            if (document.getElementById('hasDelivery').checked) {
+                data.hasDelivery = true;
+            }
+
+            if (document.getElementById('contactEmail').value) {
+                data.contactEmail = document.getElementById('contactEmail').value;
+            }
+
+            if (document.getElementById('contactNumber').value) {
+                data.contactNumber = document.getElementById('contactNumber').value;
+            }
+
+            if (document.getElementById('city').value) {
+                data.city = document.getElementById('city').value;
+            }
+
+            if (document.getElementById('street').value) {
+                data.street = document.getElementById('street').value;
+            }
+
+            if (document.getElementById('postalCode').value) {
+                data.postalCode = document.getElementById('postalCode').value;
+            }
+
+            const response = await fetch(`/api/restaurant/${restaurantId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+
+                // Wyświetlenie komunikatu o powodzeniu i przekierowanie do widoku szczegółów restauracji
+                alert(`Restauracja została zaktualizowana. Id: ${restaurantId}`);
+                window.location.href = `/restaurant/$`;
+            } else {
+                // Wyświetlenie komunikatu o błędzie
+                alert('Nie udało się utworzyć restauracji. Spróbuj ponownie później.');
+            }
+        });
+    </script>
+</body>
+</html>

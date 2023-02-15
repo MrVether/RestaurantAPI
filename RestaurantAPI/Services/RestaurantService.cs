@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RestaurantAPI.Authorization;
 using RestaurantAPI.Entities;
 using RestaurantAPI.Exceptions;
 using RestaurantAPI.Models;
@@ -42,13 +41,9 @@ namespace RestaurantAPI.Services
             {
                 throw new NotFoundException("Restaurant not found");
             }
-            var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, restaurant,
-                new ResourceOperationRequirement(ResourceOperation.Update)).Result;
 
-            if (!authorizationResult.Succeeded)
-            {
-                throw new ForbidException();
-            }
+
+
             //update the properties
             restaurant.Name = dto.Name;
             restaurant.Description = dto.Description;
@@ -68,13 +63,7 @@ namespace RestaurantAPI.Services
             {
                 throw new NotFoundException("Restaurant not found");
             }
-            var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, restaurant,
-           new ResourceOperationRequirement(ResourceOperation.Delete)).Result;
 
-            if (!authorizationResult.Succeeded)
-            {
-                throw new ForbidException();
-            }
 
             _dbContext.Restaurants.Remove(restaurant);
             _dbContext.SaveChanges();
@@ -112,7 +101,6 @@ namespace RestaurantAPI.Services
         public int Create(CreateRestaurantDto dto)
         {
             var restaurant = _mapper.Map<Restaurant>(dto);
-            restaurant.CreatedById = _userContextService.GetUserId;
             _dbContext.Restaurants.Add(restaurant);
             _dbContext.SaveChanges();
             return restaurant.Id;

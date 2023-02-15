@@ -28,7 +28,7 @@ namespace RestaurantAPI.Authorization
             // Pobieranie liczby utworzonych przez użytkownika restauracji
             var createdRestaurantsCount = _context
                  .Restaurants
-                 .Count(r => r.CreatedById == userId);
+                 .Count(r => r.Id == userId);
 
             // Jeśli użytkownik utworzył wymaganą liczbę restauracji, zwracane jest pozytywne wyniki
             if (createdRestaurantsCount >= requirement.MinimumRestaurantCreated)

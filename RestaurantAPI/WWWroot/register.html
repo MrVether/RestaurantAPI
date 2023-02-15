@@ -1,35 +1,61 @@
-﻿<form id="register-form">
-    <div>
-        <label for="email">Adres e-mail:</label>
-        <input type="email" id="email" name="email" required>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <h1 class="text-center mb-4">Register</h1>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nationality">Nationality</label>
+                        <input type="text" name="nationality" class="form-control" id="nationality" placeholder="Nationality">
+                    </div>
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input type="date" name="dateOfBirth" class="form-control" id="dateOfBirth" placeholder="Date of Birth">
+                    </div>
+                    <div class="form-group">
+                        <label for="roleId">Role</label>
+                        <select name="roleId" class="form-control" id="roleId">
+                            <option value="3">Administrator</option>
+                            <option value="2">Manager</option>
+                            <option value="1">User</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div>
-        <label for="password">Hasło:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <div>
-        <label for="confirmPassword">Potwierdź hasło:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
-    </div>
-    <div>
-        <label for="nationality">Narodowość:</label>
-        <input type="text" id="nationality" name="nationality">
-    </div>
-    <div>
-        <label for="dateOfBirth">Data urodzenia:</label>
-        <input type="date" id="dateOfBirth" name="dateOfBirth">
-    </div>
-    <div>
-        <label for="roleId">Rola:</label>
-        <select id="roleId" name="roleId">
-            <option value="3">Administrator</option>
-            <option value="2">Menadżer</option>
-            <option value="1">Użytkownik</option>
-        </select>
-    </div>
-    <button type="submit">Zarejestruj</button>
-</form>
 
+    <!-- Link to Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
 
 <script>
     const registerForm = document.querySelector('#register-form');

@@ -19,7 +19,8 @@ namespace RestaurantAPI.Controllers
             _restaurantService = restaurantService;
         }
 
-        [HttpPost]
+
+        [HttpPost("Create")]
         public ActionResult CreateRestaurant([FromBody] CreateRestaurantDto dto)
         {
 
@@ -30,7 +31,6 @@ namespace RestaurantAPI.Controllers
             //Zwracanie informacji o utworzeniu restauracji
             return Created($"/api/restaurant/{id}", null);
         }
-        [Authorize(Roles ="Admin")]
         [HttpGet]
         public ActionResult<IEnumerable<RestaurantDto>> GetAll()
         {
@@ -51,7 +51,7 @@ namespace RestaurantAPI.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
             //Usuwanie restauracji o danym ID

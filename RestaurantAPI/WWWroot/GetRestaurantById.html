@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pobierz Danie</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous" />
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Pobierz Restauracje</h1>
+        <form id="getRestaurantForm">
+            <div class="form-group">
+                <label for="restaurantId">Restaurant ID:</label>
+                <input type="number" class="form-control" id="restaurantId" name="restaurantId">
+            </div>
+            <button type="submit" class="btn btn-primary">Get Restaurant</button>
+        </form>
+        <hr>
+        <div id="restaurantList"></div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+            integrity="sha384-HM6Zu8FV+RgG4VCyvOaWttgL8QXfHezbLDMaOvzdbWwbT8eVbDF+1OwBmDy45rk/"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+</body>
+</html>
+<script>
+    const restaurantList = document.getElementById('restaurantList');
+    const getRestaurantForm = document.getElementById('getRestaurantForm');
+
+    getRestaurantForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const restaurantId = document.getElementById('restaurantId').value;
+        fetch(`/api/restaurant/${restaurantId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Clear the previous restaurant information
+                restaurantList.innerHTML = "";
+
+                // Create a new HTML element for the retrieved restaurant
+                const newRestaurant = document.createElement('div');
+                newRestaurant.innerHTML = "Restaurant Name: " + data.name + "<br>  Description: " + data.description + "<br>  Category: " + data.category + "<br>  Delivery: "
+                    + data.hasDelivery + "<br>  City: " + data.city + "<br>  Street: " + data.street + "<br>  PostalCode: " + data.postalCode;
+
+                const dishesList = document.createElement('ul');
+                data.dishes.forEach(dish => {
+                    const newDish = document.createElement('li');
+                    newDish.innerHTML = "Dish Name: " + dish.name + "<br>  Description: " + (dish.description || 'N/A') + "<br>  Price: " + dish.price;
+                    dishesList.appendChild(newDish);
+                });
+                newRestaurant.appendChild(dishesList);
+                restaurantList.appendChild(newRestaurant);
+            })
+            .catch(error => console.error(error));
+    });
+</script>
