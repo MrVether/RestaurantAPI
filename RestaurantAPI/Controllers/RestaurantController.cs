@@ -40,7 +40,7 @@ namespace RestaurantAPI.Controllers
             //Zwracanie wszystkich restauracji
             return Ok(restaurantsDtos);
         }
-
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] UpdateRestaurantDto dto, [FromRoute] int id)
         {

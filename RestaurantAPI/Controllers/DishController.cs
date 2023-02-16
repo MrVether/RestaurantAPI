@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestaurantAPI.Models;
 using RestaurantAPI.Services;
 
@@ -20,6 +21,7 @@ namespace RestaurantAPI.Controllers
             _dishService.RemoveAll(restaurantId);
             return NoContent();
         }
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost]
         public ActionResult Post([FromRoute] int restaurantId, CreateDishDto dto)
         {

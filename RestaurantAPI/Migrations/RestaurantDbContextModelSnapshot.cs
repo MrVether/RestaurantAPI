@@ -90,9 +90,6 @@ namespace RestaurantAPI.Migrations
                     b.Property<string>("ContactNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CreatedById")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -108,8 +105,6 @@ namespace RestaurantAPI.Migrations
 
                     b.HasIndex("AddressId")
                         .IsUnique();
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("Restaurants");
                 });
@@ -179,13 +174,7 @@ namespace RestaurantAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RestaurantAPI.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.Navigation("Address");
-
-                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("RestaurantAPI.Entities.User", b =>

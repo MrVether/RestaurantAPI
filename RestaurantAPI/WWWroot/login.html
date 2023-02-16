@@ -50,37 +50,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-    function OnCreate() {
-    var form = document.getElementById('loginForm')
-    form.addEventListener('submit', (e) => {
-    e.preventDefault()
-    })
-    }
+        function OnCreate() {
+            var form = document.getElementById('loginForm')
+            form.addEventListener('submit', (e) => {
+                e.preventDefault()
+            })
+        }
 
-    function sendLoginRequest() {
-    const loginForm = document.getElementById("loginForm");
-    const email = loginForm.elements["email"].value;
-    const password = loginForm.elements["PasswordHash"].value;
+        function sendLoginRequest() {
+            const loginForm = document.getElementById("loginForm");
+            const email = loginForm.elements["email"].value;
+            const password = loginForm.elements["PasswordHash"].value;
 
-    const loginDto = {
-    email: email,
-    PasswordHash: password
-    };
+            const loginDto = {
+                email: email,
+                PasswordHash: password
+            };
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/account/Login", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onreadystatechange = function () {
-    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-    alert("User logged in!");
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/api/account/Login", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    alert("User logged in!");
 
-    window.location.href = "";
-    }
-    };
+                    window.location.href = "/home.html";
 
-    xhr.send(JSON.stringify(loginDto));
-    }
-    OnCreate()
+                }
+            };
+
+            xhr.send(JSON.stringify(loginDto));
+        }
+        OnCreate()
     </script>
-    </body>
+</body>
 </html>

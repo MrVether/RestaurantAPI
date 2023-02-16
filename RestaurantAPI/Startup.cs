@@ -36,11 +36,10 @@ namespace RestaurantAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-      .AddCookie(options =>
-      {
-          options.LoginPath = "/Account/Login";
-      });
-
+          .AddCookie(options =>
+          {
+              options.LoginPath = "/login.html";
+          });
             var authenticationSettings = new AuthenticationSettings();
             Configuration.GetSection("Authentication").Bind(authenticationSettings);
             services.AddSingleton(authenticationSettings);
@@ -135,7 +134,9 @@ namespace RestaurantAPI
             app.UseEndpoints(endpoints =>
             {
                 // Map controllers to endpoints
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+         name: "default",
+         pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -24,7 +24,7 @@ namespace RestaurantAPI.Controllers
             _accountService = accountService;
             _passwordHasher = passwordHasher;
         }
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost("register")] // Zadeklarowanie, że akcja jest odpowiedzialna za rejestrację użytkownika i dostępna przez ścieżkę "api/account/register"
         public ActionResult RegisterUser([FromBody] RegisterUserDto dto)
         {

@@ -101,13 +101,11 @@
                     });
 
                     if (response.ok) {
-                        // Pobranie informacji o utworzonej restauracji z nagłówka "Location"
-                        const locationHeader = response.headers.get('Location');
-                        const restaurantId = locationHeader.split('/').pop();
+                        // Pobranie informacji o utworzonej restauracji z nagłówka "Locat
 
                         // Wyświetlenie komunikatu o powodzeniu i przekierowanie do widoku szczegółów restauracji
-                        alert(`Restauracja została utworzona. Id: ${restaurantId}`);
-                        window.location.href = `/restaurant/${restaurantId}`;
+                        alert(`Restauracja została utworzona.`);
+                        window.location.href = `api/restaurant/`;
                     } else {
                         // Wyświetlenie komunikatu o błędzie
                         alert('Nie udało się utworzyć restauracji. Spróbuj ponownie później.');
